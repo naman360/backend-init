@@ -4,8 +4,8 @@ const typeDefs = gql`
     type User {
         id: Int!
         name: String!
-        username:String!
-        menu: [Recipe!]
+        username: String!
+        menu: [Recipe!]!
     }
     type Recipe {
         id: Int!
@@ -15,13 +15,19 @@ const typeDefs = gql`
     }
     type Query {
         user(id: Int!): User
-        allUsers():[User!]
-        allRecipe():[Recipe!]
-        recipe(id:Int!):Recipe
+        allUsers: [User!]
+        allRecipes: [Recipe!]
+        recipe(id: Int!): Recipe
     }
 
-    type Mutation{
-        createUser(name:String!,username:String!,password:String!):User!
-        createRecipe( title: String!,ingredients: String!,user: User!):Recipe!
+    type Mutations {
+        createUser(name: String!, username: String!, password: String!): User!
+        createRecipe(
+            title: String!
+            ingredients: String!
+            userId: Int!
+        ): Recipe!
     }
 `;
+
+module.exports = typeDefs;
