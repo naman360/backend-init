@@ -1,9 +1,36 @@
-const { ApolloServer, gql } = require("apollo-server");
-const typeDefs = require("./src/schema");
-const resolvers = require("./src/resolver");
+const express = require("express");
+const bodyParser = require("body-parser");
+const { graphqlHTTP } = require("express-graphql");
+const { buildSchema } = require("graphql");
+const app = express();
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const PORT = process.env.PORT || 4000;
 
-server.listen().then(({ url }) => {
-    console.log(`🚀 Server ready at ${url}`);
+app.use(bodyParser.json());
+app.use(
+    "/graphql",
+    graphqlHTTP({
+        schema: buildSchema(`
+        type RootQuery{
+            events:[String!]!
+        }
+        type RootMutation{
+            createEvent(name:String):String
+        }
+        schema{
+            query:RootQuery
+            mutation:RootMutation
+        }
+    `),
+        rootValue: {
+            events: () => ["Event 1", "Event 2", "Event 3"],
+            createEvent: (args) => {
+                return args.name;
+            },
+        },
+        graphiql: true,
+    })
+);
+app.listen(PORT, () => {
+    console.log(`Server started at ${PORT}`);
 });
