@@ -1,0 +1,7 @@
+{
+    "env": {
+        "MONGO_USER": "backend-db",
+        "MONGO_PASS": "admin",
+        "CONN_STRING": "mongodb+srv://backend-db:admin@cluster0.pae0pwd.mongodb.net/event-data?retryWrites=true&w=majority"
+    }
+}
