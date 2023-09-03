@@ -11,14 +11,17 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "body-parser": "^1.20.2",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "express-graphql": "^0.12.0",
-        "graphql": "^16.8.0",
         "mongoose": "^7.5.0"
     },
     "devDependencies": {
         "nodemon": "^3.0.1"
+    },
+    "overrides": {
+        "graphql": "16.8.0"
     }
 }
