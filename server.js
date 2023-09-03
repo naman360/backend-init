@@ -123,7 +123,10 @@ app.use(
                 return event
                     .save()
                     .then((result) => {
-                        createdEvent = { ...result._doc };
+                        createdEvent = {
+                            ...result._doc,
+                            createdBy: user.bind(this, result._doc.createdBy),
+                        };
                         return User.findById("64f47a3c1847324c144ced92");
                     })
                     .then((user) => {
