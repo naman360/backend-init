@@ -18,7 +18,10 @@ module.exports = {
             throw err;
         }
     },
-    createEvent: async (args) => {
+    createEvent: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Not Authenticated");
+        }
         try {
             const { title, description, price, date } = args.eventType;
             let createdEvent;
@@ -27,7 +30,7 @@ module.exports = {
                 description,
                 price,
                 date: new Date(date),
-                createdBy: "64f47a3c1847324c144ced92",
+                createdBy: req.userId,
             });
 
             const result = await event.save();
@@ -36,7 +39,7 @@ module.exports = {
                 ...result._doc,
                 createdBy: user.bind(this, result._doc.createdBy),
             };
-            const creatorUser = await User.findById("64f47a3c1847324c144ced92");
+            const creatorUser = await User.findById(req.userId);
 
             creatorUser.createdEvents.push(event);
             await creatorUser.save();

@@ -3,7 +3,10 @@ const Booking = require("../../models/Booking");
 const { user, singleEvent } = require("./utils");
 
 module.exports = {
-    bookings: async () => {
+    bookings: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Not Authenticated");
+        }
         try {
             const bookings = await Booking.find();
             return bookings.map((booking) => {
@@ -22,11 +25,14 @@ module.exports = {
         }
     },
 
-    bookEvent: async (args) => {
+    bookEvent: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Not Authenticated");
+        }
         const { eventId } = args;
         const event = await Event.findOne({ _id: eventId });
         const booking = new Booking({
-            user: "64f47a3c1847324c144ced92",
+            user: req.userId,
             event,
         });
         const result = await booking.save();
@@ -38,7 +44,10 @@ module.exports = {
             updatedAt: new Date(result._doc.updatedAt).toISOString(),
         };
     },
-    cancelBooking: async (args) => {
+    cancelBooking: async (args, req) => {
+        if (!req.isAuth) {
+            throw new Error("Not Authenticated");
+        }
         const { bookingID } = args;
         const booking = await Booking.findById(bookingID).populate("event");
 
